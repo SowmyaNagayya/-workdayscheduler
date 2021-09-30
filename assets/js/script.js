@@ -1,84 +1,68 @@
-var saveBtn = $("[class=saveBtn]");
-var allNotes = [];
+//Global Variable for storing the text values
+var textNotes = [];//For User
+var localStoredTextNotes = []; //store in local storage
 
-saveBtn.on('click', function() {
-    console.log($(this));
+// Variables for Moment functions for displaying hours in different colors
+var now = moment();
+ $("#currentDay").text(now);
+var currentHour = now.format("HH");
 
-    $(".textBox").each(function() {
-        console.log($(this).val());
-        var userNotes = allNotes.push($(this).val());
-        console.log(allNotes);
 
-        localStorage.setItem(userNotes, JSON.stringify(allNotes));
-        var getNotes = JSON.parse(localStorage.getItem("user notes"));
 
-        $(".textBox").append(getNotes);
-    
-})
+
+//initialization
+$(document).ready(function() {
+// init() is to load the localstorage to text fields(if any)
+// init() prepopulates the coloring of Text fields
+      init(); 
 });
 
-// //selectors
 
-// $(document).ready(function(){
-//     displayTable();
+//to save the text values on save click
+function saveText(e) {
+    
+     var saveId = e;
+     var textFieldIdx = saveId.substring(saveId.length - 1);
+     var inputTextVal =  $("#text"+textFieldIdx).val();
+
+     textNotes[textFieldIdx] = inputTextVal;    
+
+     // Pushing the saved fields to localstorage variable
+
+     var tempVar;
+     for(var i=0;i<9;i++){
+          tempVar = textNotes[i];
+        localStoredTextNotes[i] = tempVar;
+     }
+
+
+     // Storing the Text notes to Local Storage
+     localStorage.setItem("localStoredNotes", JSON.stringify(localStoredTextNotes));
+}
+
+function init() {
+   // Populate Text frame with Color
+   $("input").each(function(){
+    var divHr = $(this).attr("data-hour");
+    if(divHr == currentHour){
+       $(this).addClass("present");
+    }else if(divHr > currentHour){
+        $(this).addClass("future");
+    }else if(divHr < currentHour){
+        $(this).addClass("past");
+    }
+    });
+
+    var localStorageSaveItem =  JSON.parse(localStorage.getItem("localStoredNotes") ); 
+
+    // Populate Text Fields
+    // Loop only if the values are present
+    if(localStorageSaveItem != null){
+
    
-// });
+    for(var i=0; i<9; i++){
+       $("#text"+i).val(localStorageSaveItem[i]);
+    }
+}
+}
 
-// var root =$("#schedular-row");
-
-// // Recursive function to populate the 3 column object in a row for 9 to 5 hours
-// var hourCounter = 9;
-// var ampm="am";
-// function displayTable(){
-//     while( hourCounter <= 17) {
-//         // Create Div for Time slot
-//         var timeDiv = $("<div>");
-//         timeDiv.id = "timeDiv";
-//         if( hourCounter < 12){
-//             ampm = "am";
-//         }else{
-//             ampm = "pm";
-//         }
-//         var timeHr = 0;
-//         if(hourCounter >  12){
-//             timeHr = hourCounter - 12;
-//         }else{
-//             timeHr = hourCounter;
-//         }
-//         timeDiv.text(timeHr + " " + ampm);
-//         root.append(timeDiv);
-
-//        // Create Div for Text Field  
-
-//         var textFieldDiv = $("<div>");
-//         textFieldDiv.id = "textdiv"+hourCounter;
-//         textFieldDiv.addClass("inputTextDiv");
-//         textFieldDiv.text("<input type='text' name='calendarText' id='inputText"+ hourCounter +"'  placeholder='Enter event details...'/>");
-//         root.append(textFieldDiv);
-
-//         // Create Div for Save button
-//         var buttonFieldDiv = $("<div>");
-//         buttonFieldDiv.id = "savebutton"+hourCounter;
-//         buttonFieldDiv.className ="submitButton";
-//         buttonFieldDiv.text("<button class='saveBtn' id='button"+ hourCounter +"'><i class='fa fa-save'></i></button>");
-//         root.append(buttonFieldDiv);
-//         hourCounter++;
-//     }
-// }
-
-
-// // // Auto populate save button on data entry to data field (Requirement)
-// // function handleField(event) {
-// //     event.preventDefault(event);
-// //     var itemEntered = textFieldDiv.val();
-// //     console.log(itemEntered);
-// //     textFieldDiv.text(itemEntered);
-// // }
-
-// //  //Store user enter data in local store for save click
-
-// //  buttonFieldDiv.on("saveBtn", displayTable);
- 
-// //  console.log("abc");
-
-// // // Pre poluate user data if already entered. (Requirement)
