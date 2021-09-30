@@ -10,5 +10,5 @@ Created a simple calendar application that allows a user to save events for each
 
 ## Link to deployed page
 
-You can also refer to this [GitHub Pages](https://github.com/SowmyaNagayya/codequiz).
+You can also refer to this [GitHub Pages](https://sowmyanagayya.github.io/-workdayscheduler/).
 
